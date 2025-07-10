@@ -7,23 +7,13 @@ interface LabelProps {
   children: React.ReactNode;
   size?: keyof typeof fonts.size;
   family?: keyof typeof fonts.family;
-  color?:
-    | 'electricLime'
-    | 'pacificBlue'
-    | 'persianBlue'
-    | 'persianCyan'
-    | 'desactivatedBlue'
-    | 'orange'
-    | 'background'
-    | 'white'
-    | 'error'
-    | 'success';
+  color?: keyof typeof colors;
   style?: StyleProp<TextStyle>;
   numberOfLines?: number;
   ellipsizeMode?: 'head' | 'middle' | 'tail' | 'clip';
 }
 
-const Label: React.FC<LabelProps> = ({
+export function Label({
   children,
   size = 'regular',
   family = 'regular',
@@ -31,31 +21,13 @@ const Label: React.FC<LabelProps> = ({
   style,
   numberOfLines,
   ellipsizeMode,
-}) => {
+}: LabelProps) {
   const getTextColor = (colorKey: string): string => {
-    switch (colorKey) {
-      case 'electricLime':
-        return colors.electricLime;
-      case 'pacificBlue':
-        return colors.pacificBlue;
-      case 'persianBlue':
-        return colors.persianBlue;
-      case 'persianCyan':
-        return colors.persianCyan;
-      case 'desactivatedBlue':
-        return colors.desactivatedBlue;
-      case 'orange':
-        return colors.orange;
-      case 'background':
-        return colors.background;
-      case 'white':
-        return colors.white;
-      case 'error':
-        return colors.error;
-      case 'success':
-        return colors.success;
-      default:
-        return colors.white; 
+    const colorChoosen = colors[colorKey as keyof typeof colors];
+    if (colorChoosen) {
+      return colorChoosen;
+    } else {
+      return colors.white;
     }
   };
 
@@ -74,6 +46,4 @@ const Label: React.FC<LabelProps> = ({
       {children}
     </Text>
   );
-};
-
-export default Label;
+}

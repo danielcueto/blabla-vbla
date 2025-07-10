@@ -4,14 +4,17 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StackNavigation } from './src/navigation/StackNavigation';
 import Toast from 'react-native-toast-message';
 import { toastConfig } from './src/components/toast/ToastConfig';
+import { AuthProvider } from './src/contexts/AuthContext';
 
 function App() {
   return (
     <SafeAreaProvider>
       <View style={styles.container}>
-        <NavigationContainer>
-          <StackNavigation />
-        </NavigationContainer>
+        <AuthProvider>
+          <NavigationContainer>
+            <StackNavigation />
+          </NavigationContainer>
+        </AuthProvider>
         <Toast config={toastConfig} />
       </View>
     </SafeAreaProvider>

@@ -17,7 +17,7 @@ export const showCustomToast = ({
   message,
   description = '',
   durationSeconds = 3,
-  position = 'top',
+  position = 'bottom',
   onShow,
   onHide,
 }: CustomToastProps) => {

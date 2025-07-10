@@ -23,7 +23,7 @@ interface LabelProps {
   ellipsizeMode?: 'head' | 'middle' | 'tail' | 'clip';
 }
 
-const Label: React.FC<LabelProps> = ({
+export function Label({
   children,
   size = 'regular',
   family = 'regular',
@@ -31,7 +31,7 @@ const Label: React.FC<LabelProps> = ({
   style,
   numberOfLines,
   ellipsizeMode,
-}) => {
+}: LabelProps) {
   const getTextColor = (colorKey: string): string => {
     switch (colorKey) {
       case 'electricLime':
@@ -55,7 +55,7 @@ const Label: React.FC<LabelProps> = ({
       case 'success':
         return colors.success;
       default:
-        return colors.white; 
+        return colors.white;
     }
   };
 
@@ -74,6 +74,4 @@ const Label: React.FC<LabelProps> = ({
       {children}
     </Text>
   );
-};
-
-export default Label;
+}

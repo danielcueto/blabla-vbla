@@ -1,19 +1,16 @@
 import { useState } from 'react';
 import {
   View,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
-  ScrollView,
   Image,
   Dimensions,
+
 } from 'react-native';
 import { showCustomToast } from '../components/toast/CustomToast';
 import { colors } from '../theme/colors';
-import { fonts } from '../theme/fonts';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import Label from '../components/common/Label';
+import { Label } from '../components/common/Label';
+import { Input } from '../components/common/Input';
 
 import HeadLoginSvg from '../../assets/svg/head_login.svg';
 import OrnamentLoginSvg from '../../assets/svg/ornament_login.svg';
@@ -21,53 +18,13 @@ import OrnamentLoginSvg from '../../assets/svg/ornament_login.svg';
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const isSmallScreen = screenWidth < 380;
 const isTablet = screenWidth > 768;
+const isLandscape = screenWidth > screenHeight;
 
-const validateEmail = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
-
-const sanitizeInput = (input: string): string => {
-  return input
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#x27;')
-    .replace(/\//g, '&#x2F;')
-    .trim();
-};
 
 export function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState({ email: '', password: '' });
-
-  const handleEmailChange = (text: string) => {
-    const sanitizedEmail = sanitizeInput(text);
-    setEmail(sanitizedEmail);
-
-    if (sanitizedEmail && !validateEmail(sanitizedEmail)) {
-      setErrors(prev => ({ ...prev, email: 'Enter a valid main address' }));
-    } else {
-      setErrors(prev => ({ ...prev, email: '' }));
-    }
-  };
-
-  const handlePasswordChange = (text: string) => {
-    const sanitizedPassword = sanitizeInput(text);
-    setPassword(sanitizedPassword);
-
-    if (sanitizedPassword && sanitizedPassword.length < 5) {
-      setErrors(prev => ({
-        ...prev,
-        password: 'Password no',
-      }));
-    } else {
-      setErrors(prev => ({ ...prev, password: '' }));
-    }
-  };
 
   const handleSubmit = async () => {
     if (!email || !password) {
@@ -75,15 +32,6 @@ export function LoginScreen() {
         type: 'error',
         message: 'Campos requeridos',
         description: 'Por favor completa todos los campos',
-      });
-      return;
-    }
-
-    if (!validateEmail(email)) {
-      showCustomToast({
-        type: 'error',
-        message: 'Email inválido',
-        description: 'Por favor ingresa un email válido',
       });
       return;
     }
@@ -118,23 +66,24 @@ export function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header SVG - Top of screen */}
-      <View style={styles.headerSvgContainer}>
-        <HeadLoginSvg width="100%" height={100} />
-      </View>
-      
-      <ScrollView
-        contentContainerStyle={styles.scrollContainer}
-        keyboardShouldPersistTaps="handled"
-      >
+      {!isLandscape && (
+        <View style={styles.headerSvgContainer}>
+          <HeadLoginSvg
+            width={screenWidth}
+            height={isTablet ? screenHeight * 0.25 : screenHeight * 0.2}
+          />
+        </View>
+      )}
+
+      <View style={styles.mainContent}>
         <View style={styles.formContainer}>
           <Image
             source={require('../../assets/images/AssuresoftLogo.png')}
             style={styles.logo}
             resizeMode="contain"
           />
-          <Label 
-            size={isTablet ? "xlarge" : isSmallScreen ? "medium" : "large"}
+          <Label
+            size={isTablet ? 'xlarge' : isSmallScreen ? 'medium' : 'large'}
             family="bold"
             color="white"
             style={styles.title}
@@ -142,104 +91,37 @@ export function LoginScreen() {
             Snaps
           </Label>
 
-          <View style={styles.inputContainer}>
-            <Label 
-              size={isTablet ? "regular" : "small"}
-              family="semiBold"
-              color="white"
-              style={styles.label}
-            >
-              Email
-            </Label>
-            <View style={styles.inputWrapper}>
-              <TextInput
-                style={[styles.input, errors.email ? styles.inputError : null]}
-                placeholder="name@assuresoft.com"
-                placeholderTextColor={colors.desactivatedBlue}
-                value={email}
-                onChangeText={handleEmailChange}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoCorrect={false}
-                autoComplete="email"
-                maxLength={100}
-              />
-            </View>
-            {errors.email ? (
-              <Label 
-                size={isTablet ? "small" : "xsmall"}
-                family="regular"
-                color="error"
-                style={styles.errorText}
-              >
-                {errors.email}
-              </Label>
-            ) : null}
-          </View>
+          <Input
+            label="Email"
+            value={email}
+            onChangeText={setEmail}
+            type="email"
+            placeholder="name@assuresoft.com"
+            maxLength={100}
+            autoComplete="email"
+          />
 
-          <View style={styles.inputContainer}>
-            <Label 
-              size={isTablet ? "regular" : "small"}
-              family="semiBold"
-              color="white"
-              style={styles.label}
-            >
-              Password
-            </Label>
-            <View style={styles.inputWrapper}>
-              <View style={styles.passwordContainer}>
-                <TextInput
-                  style={[
-                    styles.passwordInput,
-                    errors.password ? styles.inputError : null,
-                  ]}
-                  placeholder="password"
-                  placeholderTextColor={colors.desactivatedBlue}
-                  value={password}
-                  onChangeText={handlePasswordChange}
-                  secureTextEntry={!showPassword}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  autoComplete="password"
-                  maxLength={50}
-                />
-                <TouchableOpacity
-                  style={styles.eyeButton}
-                  onPress={() => setShowPassword(!showPassword)}
-                  activeOpacity={0.7}
-                >
-                  <FontAwesomeIcon
-                    icon={showPassword ? faEye : faEyeSlash}
-                    size={18}
-                    color={colors.desactivatedBlue}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-            {errors.password ? (
-              <Label 
-                size={isTablet ? "small" : "xsmall"}
-                family="regular"
-                color="error"
-                style={styles.errorText}
-              >
-                {errors.password}
-              </Label>
-            ) : null}
-          </View>
+          <Input
+            label="Password"
+            value={password}
+            onChangeText={setPassword}
+            type="password"
+            placeholder="password"
+            maxLength={50}
+            autoComplete="password"
+          />
 
           <TouchableOpacity
             style={[
               styles.submitButton,
-              (isLoading || errors.email || errors.password) &&
-                styles.submitButtonDisabled,
+              isLoading && styles.submitButtonDisabled,
             ]}
             onPress={handleSubmit}
-            disabled={isLoading || !!errors.email || !!errors.password}
+            disabled={isLoading}
             activeOpacity={0.8}
           >
-            <Label 
-              size={isTablet ? "regular" : "small"}
+            <Label
+              size={isTablet ? 'regular' : 'small'}
               family="semiBold"
               color="white"
               style={styles.submitButtonText}
@@ -248,10 +130,13 @@ export function LoginScreen() {
             </Label>
           </TouchableOpacity>
         </View>
-      </ScrollView>
-      
+      </View>
+
       <View style={styles.ornamentSvgContainer}>
-        <OrnamentLoginSvg width={150} height={150} />
+        <OrnamentLoginSvg
+          width={isTablet ? 140 : isSmallScreen ? 80 : 100}
+          height={isTablet ? 140 : isSmallScreen ? 80 : 100}
+        />
       </View>
     </View>
   );
@@ -267,113 +152,42 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    zIndex: 1,
+    zIndex: 0,
   },
   ornamentSvgContainer: {
     position: 'absolute',
     bottom: 0,
-    right: 0,
-    zIndex: 1,
+    left: 0,
+    zIndex: 0,
   },
-  scrollContainer: {
-    flexGrow: 1,
+  mainContent: {
+    flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: isTablet ? screenWidth * 0.15 : isSmallScreen ? 16 : 24,
-    paddingVertical: isSmallScreen ? 20 : 40,
-    minHeight: screenHeight,
-    paddingTop: 120, 
+    alignItems: 'center',
+    paddingHorizontal: isTablet ? 60 : isSmallScreen ? 20 : 24,
+    paddingVertical: 40,
+    zIndex: 1,
+    height: isLandscape ? screenHeight * 0.9 : undefined,
   },
   formContainer: {
-    padding: isTablet ? 32 : isSmallScreen ? 16 : 24,
-    shadowOffset: { width: 0, height: 2 },
-    maxWidth: isTablet ? 500 : '100%',
     width: '100%',
+    maxWidth: isTablet ? 400 : screenWidth,
+    alignItems: 'center',
   },
   logo: {
     width: isTablet ? 160 : isSmallScreen ? 100 : 120,
     height: isTablet ? 80 : isSmallScreen ? 50 : 60,
-    alignSelf: 'center',
     marginBottom: isTablet ? 32 : isSmallScreen ? 16 : 24,
   },
   title: {
     textAlign: 'center',
     marginBottom: isTablet ? 40 : isSmallScreen ? 24 : 32,
   },
-  inputContainer: {
-    marginBottom: isTablet ? 24 : isSmallScreen ? 16 : 20,
-  },
-  inputWrapper: {
-    marginRight: -(isTablet ? screenWidth * 0.15 : isSmallScreen ? 16 : 24), // Extend to screen edge
-  },
-  label: {
-    marginBottom: isSmallScreen ? 6 : 8,
-  },
-  input: {
-    height: isTablet ? 56 : isSmallScreen ? 44 : 50,
-    borderWidth: 1,
-    borderColor: colors.desactivatedBlue,
-    borderTopLeftRadius: 30,
-    borderBottomLeftRadius: 30,
-    borderTopRightRadius: 0,
-    borderBottomRightRadius: 0,
-    paddingHorizontal: isTablet ? 20 : 16,
-    fontSize: isTablet ? fonts.size.regular : fonts.size.small,
-    fontFamily: fonts.family.regular,
-    backgroundColor: colors.white,
-    color: colors.background,
-    marginRight: 0,
-    borderRightWidth: 0, // Remove right border to extend to edge
-  },
-  inputError: {
-    borderColor: colors.error,
-    backgroundColor: '#fff5f5',
-  },
-  passwordContainer: {
-    position: 'relative',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  passwordInput: {
-    flex: 1,
-    height: isTablet ? 56 : isSmallScreen ? 44 : 50,
-    borderWidth: 1,
-    borderColor: colors.desactivatedBlue,
-    borderTopLeftRadius: 30,
-    borderBottomLeftRadius: 30,
-    borderTopRightRadius: 0,
-    borderBottomRightRadius: 0,
-    paddingHorizontal: isTablet ? 20 : 16,
-    paddingRight: isTablet ? 60 : 50,
-    fontSize: isTablet ? fonts.size.regular : fonts.size.small,
-    fontFamily: fonts.family.regular,
-    backgroundColor: colors.white,
-    color: colors.background,
-    marginRight: 0,
-    borderRightWidth: 0, // Remove right border to connect with eye button
-  },
-  eyeButton: {
-    position: 'absolute',
-    right: 0,
-    height: isTablet ? 56 : isSmallScreen ? 44 : 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: isTablet ? 60 : 50,
-    backgroundColor: colors.white,
-    borderWidth: 1,
-    borderColor: colors.desactivatedBlue,
-    borderTopRightRadius: 0, // Square right edge to reach screen border
-    borderBottomRightRadius: 0,
-    borderLeftWidth: 0,
-    borderRightWidth: 0, // No right border to extend to edge
-  },
-  errorText: {
-    marginTop: 4,
-    marginLeft: 4,
-  },
   submitButton: {
+    width: '100%',
     height: isTablet ? 56 : isSmallScreen ? 44 : 50,
     backgroundColor: colors.pacificBlue,
-    borderRadius: 20,
+    borderRadius: isTablet ? 30 : 25,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: isTablet ? 16 : 8,
@@ -382,7 +196,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
-    marginRight: 0,
   },
   submitButtonDisabled: {
     backgroundColor: colors.desactivatedBlue,
@@ -390,6 +203,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0,
   },
   submitButtonText: {
-  
+    textAlign: 'center',
   },
 });

@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { LoginScreen } from '../screens/LoginScreen';
+import { ImageCompressScreen } from '../screens/LoginScreen';
 
 const Stack = createNativeStackNavigator();
 export function StackNavigation() {
@@ -10,7 +10,7 @@ export function StackNavigation() {
           headerShown: false,
         }}
         name="LoginScreen"
-        component={LoginScreen}
+        component={ImageCompressScreen}
       />
     </Stack.Navigator>
   );

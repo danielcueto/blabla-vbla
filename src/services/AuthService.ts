@@ -21,8 +21,6 @@ class AuthService {
 
       return response;
     } catch (error: any) {
-      console.log('AuthService: Login failed with error:', error.message);
-      // Re-lanzar el error tal como viene del ApiService, que ya tiene mensajes user-friendly
       throw error;
     }
   }

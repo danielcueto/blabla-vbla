@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, StyleSheet, Image, Dimensions } from 'react-native';
+import { View, StyleSheet, Image, Dimensions, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
 import { showCustomToast } from '../components/toast/CustomToast';
 import { colors } from '../theme/colors';
@@ -38,19 +38,15 @@ export function LoginScreen() {
 
     try {
       const response: LoginResponse = await authService.login(email, password);
-      console.log('LoginScreen: Login successful, isFirstLogin:', response.isFirstLogin);
-      
       showCustomToast({
         type: 'success',
         message: 'Login Successful',
       });
-
       // Aquí puedes navegar a la siguiente pantalla
       // navigation.navigate('HomeCamera');
       // usando response.isFirstLogin
     } catch (error: any) {
-      console.log('LoginScreen: Login failed with error:', error.message);
-      setErrorMessage(error.message);
+      setErrorMessage("We found some errores. Please review the fields and make corrections");
       setShowErrorMessage(true);
     } finally {
       setIsLoading(false);
@@ -58,75 +54,82 @@ export function LoginScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <ErrorMessage
-        message={errorMessage}
-        visible={showErrorMessage}
-        onHide={() => setShowErrorMessage(false)}
-      />
-
-      {!isLandscape && (
-        <View style={styles.headerSvgContainer}>
-          <HeadLoginSvg
-            width={screenWidth}
-            height={isTablet ? screenHeight * 0.25 : screenHeight * 0.2}
+    <KeyboardAvoidingView 
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.inner}>
+          <ErrorMessage
+            message={errorMessage}
+            visible={showErrorMessage}
+            onHide={() => setShowErrorMessage(false)}
           />
+
+          {!isLandscape && (
+            <View style={styles.headerSvgContainer}>
+              <HeadLoginSvg
+                width={screenWidth}
+                height={isTablet ? screenHeight * 0.25 : screenHeight * 0.2}
+              />
+            </View>
+          )}
+
+          <View style={styles.mainContent}>
+            <View style={styles.formContainer}>
+              <Image
+                source={require('../../assets/images/AssuresoftLogo.png')}
+                style={styles.logo}
+                resizeMode="contain"
+              />
+              <Label
+                size={isTablet ? 'xlarge' : isSmallScreen ? 'medium' : 'large'}
+                family="bold"
+                color="white"
+                style={styles.title}
+              >
+                Snaps
+              </Label>
+
+              <Input
+                label="Email"
+                value={email}
+                onChangeText={setEmail}
+                type="email"
+                placeholder="name@assuresoft.com"
+                maxLength={100}
+                autoComplete="email"
+              />
+
+              <Input
+                label="Password"
+                value={password}
+                onChangeText={setPassword}
+                type="password"
+                placeholder="password"
+                maxLength={50}
+                autoComplete="password"
+              />
+
+              <Button
+                text={isLoading ? 'Login...' : 'Login'}
+                fullWidth={true}
+                isLoading={isLoading}
+                onPress={handleSubmit}
+                style={styles.submitButton}
+              />
+            </View>
+          </View>
+
+          <View style={styles.ornamentSvgContainer}>
+            <OrnamentLoginSvg
+              width={isTablet ? 140 : isSmallScreen ? 80 : 100}
+              height={isTablet ? 140 : isSmallScreen ? 80 : 100}
+            />
+          </View>
         </View>
-      )}
-
-      <View style={styles.mainContent}>
-        <View style={styles.formContainer}>
-          <Image
-            source={require('../../assets/images/AssuresoftLogo.png')}
-            style={styles.logo}
-            resizeMode="contain"
-          />
-          <Label
-            size={isTablet ? 'xlarge' : isSmallScreen ? 'medium' : 'large'}
-            family="bold"
-            color="white"
-            style={styles.title}
-          >
-            Snaps
-          </Label>
-
-          <Input
-            label="Email"
-            value={email}
-            onChangeText={setEmail}
-            type="email"
-            placeholder="name@assuresoft.com"
-            maxLength={100}
-            autoComplete="email"
-          />
-
-          <Input
-            label="Password"
-            value={password}
-            onChangeText={setPassword}
-            type="password"
-            placeholder="password"
-            maxLength={50}
-            autoComplete="password"
-          />
-
-          <Button
-            text={isLoading ? 'Login...' : 'Login'}
-            fullWidth={true}
-            isLoading={isLoading}
-            onPress={handleSubmit}
-            style={styles.submitButton}
-          />
-        </View>
-      </View>
-
-      <View style={styles.ornamentSvgContainer}>
-        <OrnamentLoginSvg
-          width={isTablet ? 140 : isSmallScreen ? 80 : 100}
-          height={isTablet ? 140 : isSmallScreen ? 80 : 100}
-        />
-      </View>
-    </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -134,6 +137,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
+  },
+  inner: {
+    flex: 1,
   },
   headerSvgContainer: {
     position: 'absolute',
@@ -156,6 +162,7 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
     zIndex: 1,
     height: isLandscape ? screenHeight * 0.9 : undefined,
+    minHeight: isLandscape ? screenHeight * 0.8 : screenHeight * 0.6,
   },
   formContainer: {
     width: '100%',

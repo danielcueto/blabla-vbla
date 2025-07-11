@@ -18,6 +18,14 @@ const isSmallScreen = screenWidth < 380;
 const isTablet = screenWidth > 768;
 const isLandscape = screenWidth > screenHeight;
 
+const getKeyboardOffset = () => {
+  if (Platform.OS === 'ios') return 0;
+  
+  if (isTablet) return -60;
+  if (isSmallScreen) return -40;
+  return -40;
+};
+
 export function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -42,10 +50,12 @@ export function LoginScreen() {
         type: 'success',
         message: 'Login Successful',
       });
+
       // Aquí puedes navegar a la siguiente pantalla
       // navigation.navigate('HomeCamera');
       // usando response.isFirstLogin
     } catch (error: any) {
+      console.log(error);
       setErrorMessage("We found some errores. Please review the fields and make corrections");
       setShowErrorMessage(true);
     } finally {
@@ -56,7 +66,8 @@ export function LoginScreen() {
   return (
     <KeyboardAvoidingView 
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={'padding'}
+      keyboardVerticalOffset={getKeyboardOffset()}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.inner}>

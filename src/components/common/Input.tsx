@@ -54,7 +54,7 @@ const getValidationError = (value: string, type: InputType): string => {
     case 'email':
       return !validateEmail(value) ? 'Enter a valid email address' : '';
     case 'password':
-      return value.length < 6 ? 'wrong password format' : '';
+      return value.length < 3 ? 'wrong password format' : '';
     default:
       return '';
   }

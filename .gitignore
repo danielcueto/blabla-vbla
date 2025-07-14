@@ -77,3 +77,6 @@ yarn-error.log
 
 __tests__
 .vscode
+
+# Ignorar el env de la carpeta config
+/src/config/.env

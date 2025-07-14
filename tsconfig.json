@@ -4,6 +4,14 @@
     "typeRoots": [
       "./src/types",
       "./node_modules/@types"
-    ]
-  }
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@env": ["src/config/env.d.ts"]
+    }
+  },
+  "include": [
+    "src",
+    "src/config/env.d.ts"
+  ]
 }

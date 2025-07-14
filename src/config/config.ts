@@ -1,53 +1,57 @@
-// src/config/config.ts
 import { Platform } from 'react-native'
+import {
+  REACT_NATIVE_API_BASE_URL,
+  DEVELOPMENT_ANDROID_API_BASE_URL,
+  DEVELOPMENT_IOS_API_BASE_URL,
+  NODE_ENV,
+  REQUEST_TIMEOUT,
+  CAMERA_SNAPSHOT_TIMEOUT,
+  ASYNC_OP_TIMEOUT,
+  SNAPSHOT_QUALITY,
+} from '@env'
 
 /**
- * Default host for development.
- * - Android emulator: http://10.0.2.2:3000
- * - iOS simulator:   http://localhost:3000
+ * Elige la URL de desarrollo según la plataforma,
+ * ahora ambas vienen de variables de entorno.
  */
-const DEFAULT_DEVELOPMENT_HOST = Platform.OS === 'android'
-  ? 'http://10.0.2.2:3000'
-  : 'http://localhost:3000'
+function getDefaultDevHost(): string {
+  return Platform.OS === 'android'
+    ? DEVELOPMENT_ANDROID_API_BASE_URL
+    : DEVELOPMENT_IOS_API_BASE_URL
+}
 
 /**
- * Base URL for API requests.
- * In production, set REACT_NATIVE_API_BASE_URL in your environment variables.
- * Falls back to DEFAULT_DEVELOPMENT_HOST in development.
+ * Base URL para peticiones a la API.
+ * - En producción: toma REACT_NATIVE_API_BASE_URL.
+ * - En desarrollo: toma la URL adecuada para el emulador/simulador.
  */
-export const API_BASE_URL: string =
-  process.env.REACT_NATIVE_API_BASE_URL ?? DEFAULT_DEVELOPMENT_HOST
+export const API_BASE_URL: string = 
+  NODE_ENV === 'production'
+    ? REACT_NATIVE_API_BASE_URL
+    : getDefaultDevHost()
 
 /**
- * Indicates whether the app is running in development mode.
- * Useful for enabling debug logs or mock data.
+ * Flag si estamos en entorno distinto a producción.
  */
-export const IS_DEVELOPMENT_MODE: boolean =
-  process.env.NODE_ENV !== 'production'
+export const IS_DEVELOPMENT_MODE = NODE_ENV !== 'production'
 
 /**
- * Global request timeout in milliseconds.
+ * Timeouts (milisegundos).
  */
-export const REQUEST_TIMEOUT_MILLISECONDS = 15_000
+export const REQUEST_TIMEOUT_MS = parseInt(REQUEST_TIMEOUT, 10) || 15000
+export const CAMERA_SNAPSHOT_TIMEOUT_MS = parseInt(CAMERA_SNAPSHOT_TIMEOUT, 10) || 8000
+export const ASYNC_OPERATION_TIMEOUT_MS = parseInt(ASYNC_OP_TIMEOUT, 10) || 8000
 
 /**
- * Maximum time to wait for a camera snapshot, in milliseconds.
+ * Calidad de snapshots de cámara (0–100).
  */
-export const CAMERA_SNAPSHOT_TIMEOUT_MILLISECONDS = 8_000
+export const CAMERA_SNAPSHOT_QUALITY_PERCENT = parseInt(SNAPSHOT_QUALITY, 10) || 100
 
 /**
- * Default timeout for generic async operations, in milliseconds.
+ * En producción, forzar HTTPS.
  */
-export const ASYNC_OPERATION_TIMEOUT_MILLISECONDS = 8_000
-
-/**
- * Quality percentage for camera snapshots (0–100).
- */
-export const CAMERA_SNAPSHOT_QUALITY_PERCENT = 100
-
-// Optional: enforce HTTPS in production
-if (!IS_DEVELOPMENT_MODE && !API_BASE_URL.startsWith('https://')) {
+if (NODE_ENV === 'production' && !API_BASE_URL.startsWith('https://')) {
   throw new Error(
-    '[config] API_BASE_URL must start with "https://" in production'
+    '[config] API_BASE_URL must start with "https://" in production mode.'
   )
 }

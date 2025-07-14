@@ -1,5 +1,5 @@
-import { apiService, LoginRequest, LoginResponse } from './ApiService';
-import { storageService, UserData } from './StorageService';
+import { apiService, LoginRequest, LoginResponse } from '../apiService/ApiService';
+import { storageService, UserData } from '../StorageService/StorageService';
 
 export interface AuthState {
   isAuthenticated: boolean;
@@ -54,11 +54,19 @@ class AuthService {
   }
 
   async getCurrentUser(): Promise<UserData | null> {
-    return await storageService.getUserData();
+    try {
+      return await storageService.getUserData();
+    } catch (error) {
+      return null;
+    }
   }
 
   async hasValidToken(): Promise<boolean> {
-    return await storageService.isAuthenticated();
+    try {
+      return await storageService.isAuthenticated();
+    } catch (error) {
+      return false;
+    }
   }
 }
 

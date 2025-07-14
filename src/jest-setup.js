@@ -3,6 +3,24 @@ import 'react-native-gesture-handler/jestSetup';
 
 // ----------------- MÓDULOS NATIVE -----------------
 
+// Mock AsyncStorage
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  setItem: jest.fn(),
+  getItem: jest.fn(),
+  removeItem: jest.fn(),
+  clear: jest.fn(),
+  getAllKeys: jest.fn(),
+  multiGet: jest.fn(),
+  multiSet: jest.fn(),
+  multiRemove: jest.fn(),
+}));
+
+// Mock react-native-config
+jest.mock('react-native-config', () => ({
+  API_BASE_URL: 'http://test-api.com',
+  API_TIMEOUT: '10000',
+}));
+
 jest.mock('react-native-device-info', () => ({
   isEmulatorSync: jest.fn(() => false),
 }));

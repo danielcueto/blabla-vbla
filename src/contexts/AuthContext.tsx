@@ -1,7 +1,7 @@
 import React, { createContext, useContext, ReactNode } from 'react';
-import { useAuth } from '../hooks/useAuth';
-import { LoginResponse } from '../services/ApiService';
-import { UserData } from '../services/StorageService';
+import { useAuth } from '../hooks/useAuth/useAuth';
+import { LoginResponse } from '../services/apiService/ApiService';
+import { UserData } from '../services/StorageService/StorageService';
 
 interface AuthContextType {
   isAuthenticated: boolean;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, TextStyle, StyleProp } from 'react-native';
-import { fonts } from '../../theme/fonts';
-import { colors } from '../../theme/colors';
+import { fonts } from '../../config/theme';
+import { colors } from '../../config/theme';
 
 interface LabelProps {
   children: React.ReactNode;
@@ -17,7 +17,7 @@ export function Label({
   children,
   size = 'regular',
   family = 'regular',
-  color = 'white',
+  color = 'pureWhite',
   style,
   numberOfLines,
   ellipsizeMode,
@@ -27,7 +27,7 @@ export function Label({
     if (colorChoosen) {
       return colorChoosen;
     } else {
-      return colors.white;
+      return colors.pureWhite;
     }
   };
 

@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import Config from 'react-native-config';
-import { storageService } from './StorageService';
+import { storageService } from '../StorageService/StorageService';
 
 export interface LoginRequest {
   username: string;

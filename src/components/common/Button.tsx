@@ -6,7 +6,7 @@ import {
   TouchableOpacityProps,
 } from 'react-native';
 import { Label } from './Label';
-import { colors } from '../../theme/colors';
+import { colors } from '../../config/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
 const isSmallScreen = screenWidth < 380;
@@ -47,7 +47,7 @@ export function Button({
       <Label
         size={isTablet ? 'regular' : 'small'}
         family="semiBold"
-        color={variant === 'secondary' ? 'pacificBlue' : 'white'}
+        color={variant === 'secondary' ? 'pacificBlue' : 'pureWhite'}
         style={styles.buttonText}
       >
         {isLoading ? 'Loading...' : text}
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     borderColor: colors.pacificBlue,
   },
   buttonDisabled: {
-    backgroundColor: colors.desactivatedBlue,
+    backgroundColor: colors.deactivatedBlue,
     elevation: 0,
     shadowOpacity: 0,
   },

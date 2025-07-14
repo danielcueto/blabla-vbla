@@ -12,7 +12,7 @@ import Animated, {
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { Label } from '../common/Label';
-import { colors } from '../../theme/colors';
+import { colors } from '../../config/theme';
 
 interface ErrorMessageProps {
   message: string;
@@ -79,11 +79,11 @@ export function ErrorMessage({
           <FontAwesomeIcon
             icon={faExclamationTriangle}
             size={20}
-            color={colors.white}
+            color={colors.pureWhite}
           />
         </View>
         <View style={styles.textContainer}>
-          <Label size="small" family="semiBold" color="white">
+          <Label size="small" family="semiBold" color="pureWhite">
             {message}
           </Label>
         </View>
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     zIndex: 9999,
   },
   errorMessage: {
-    backgroundColor: colors.error,
+    backgroundColor: colors.errorRed,
     borderRadius: 25,
     flexDirection: 'row',
     alignItems: 'center',
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: colors.error,
+    backgroundColor: colors.errorRed,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,

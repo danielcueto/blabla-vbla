@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import { colors } from '../../theme/colors';
-import { fonts } from '../../theme/fonts';
+import { colors } from '../../config/theme';
+import { fonts } from '../../config/theme';
 import { Label } from './Label';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -100,8 +100,8 @@ export function Input({
       <Label
         size={isTablet ? 'regular' : 'small'}
         family="semiBold"
-        color="white"
-        style={[styles.label, displayError ? { color: colors.error } : null]}
+        color="pureWhite"
+        style={[styles.label, displayError ? { color: colors.errorRed } : null]}
       >
         {label}
       </Label>
@@ -114,7 +114,7 @@ export function Input({
                 displayError ? styles.inputError : null,
               ]}
               placeholder={placeholder}
-              placeholderTextColor={colors.desactivatedBlue}
+              placeholderTextColor={colors.deactivatedBlue}
               value={value}
               onChangeText={handleTextChange}
               secureTextEntry={!showPassword}
@@ -131,7 +131,7 @@ export function Input({
               <FontAwesomeIcon
                 icon={showPassword ? faEyeSlash : faEye}
                 size={isTablet ? 22 : 18}
-                color={colors.desactivatedBlue}
+                color={colors.deactivatedBlue}
               />
             </TouchableOpacity>
           </View>
@@ -139,7 +139,7 @@ export function Input({
           <TextInput
             style={[styles.input, displayError ? styles.inputError : null]}
             placeholder={placeholder}
-            placeholderTextColor={colors.desactivatedBlue}
+            placeholderTextColor={colors.deactivatedBlue}
             value={value}
             onChangeText={handleTextChange}
             keyboardType={getKeyboardType(type)}
@@ -152,9 +152,9 @@ export function Input({
       </View>
       {displayError ? (
         <Label
-          size={isTablet ? 'small' : 'xsmall'}
+          size={isTablet ? 'small' : 'extraSmall'}
           family="regular"
-          color="error"
+          color="errorRed"
           style={styles.errorText}
         >
           {displayError}
@@ -185,12 +185,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: isTablet ? 20 : 16,
     fontSize: isTablet ? fonts.size.regular : fonts.size.small,
     fontFamily: fonts.family.regular,
-    backgroundColor: colors.white,
-    color: colors.background,
+    backgroundColor: colors.pureWhite,
+    color: colors.backgroundDark,
   },
   inputError: {
     borderWidth: 3,
-    borderColor: colors.error,
+    borderColor: colors.errorRed,
   },
   passwordContainer: {
     position: 'relative',
@@ -207,8 +207,8 @@ const styles = StyleSheet.create({
     paddingRight: isTablet ? 60 : 50,
     fontSize: isTablet ? fonts.size.regular : fonts.size.small,
     fontFamily: fonts.family.regular,
-    backgroundColor: colors.white,
-    color: colors.background,
+    backgroundColor: colors.pureWhite,
+    color: colors.backgroundDark,
   },
   eyeButton: {
     position: 'absolute',

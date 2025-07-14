@@ -1,7 +1,7 @@
 import { renderHook, act } from '@testing-library/react-hooks'
 import useSafeAsync from '../useSafeAsync'
 import { TimeoutError } from '../../../utils/withTimeout'
-import { REQUEST_TIMEOUT_MILLISECONDS } from '../../../config/config'
+import { REQUEST_TIMEOUT_MS } from '../../../config/config'
 
 describe('useSafeAsync hook', () => {
   beforeEach(() => {
@@ -44,18 +44,18 @@ describe('useSafeAsync hook', () => {
         new Promise((_res, rej) =>
           setTimeout(
             () => rej(new TimeoutError('timeout occurred')),
-            REQUEST_TIMEOUT_MILLISECONDS + 10
+            REQUEST_TIMEOUT_MS + 10
           )
         )
     )
     const { result } = renderHook(() =>
-      useSafeAsync<number>(asyncOp, REQUEST_TIMEOUT_MILLISECONDS)
+      useSafeAsync<number>(asyncOp, REQUEST_TIMEOUT_MS)
     )
 
     let output: number | null = null
     await act(async () => {
       const p = result.current.executeAsyncOperation()
-      jest.advanceTimersByTime(REQUEST_TIMEOUT_MILLISECONDS + 10)
+      jest.advanceTimersByTime(REQUEST_TIMEOUT_MS + 10)
       output = await p
     })
 

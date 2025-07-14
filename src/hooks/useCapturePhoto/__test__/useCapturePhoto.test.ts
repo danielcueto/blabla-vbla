@@ -3,7 +3,7 @@ import { renderHook, act } from '@testing-library/react-hooks'
 import useCapturePhoto from '../useCapturePhoto'
 import { TimeoutError } from '../../../utils/withTimeout'
 import {
-  CAMERA_SNAPSHOT_TIMEOUT_MILLISECONDS,
+  CAMERA_SNAPSHOT_TIMEOUT_MS,
   CAMERA_SNAPSHOT_QUALITY_PERCENT,
 } from '../../../config/config'
 import type { Camera } from 'react-native-vision-camera'
@@ -58,7 +58,7 @@ describe('useCapturePhoto hook', () => {
         new Promise((_res, rej) =>
           setTimeout(
             () => rej(new TimeoutError('timeout')),
-            CAMERA_SNAPSHOT_TIMEOUT_MILLISECONDS + 1
+            CAMERA_SNAPSHOT_TIMEOUT_MS + 1
           )
         )
     )
@@ -68,7 +68,7 @@ describe('useCapturePhoto hook', () => {
     let returnedUri: string | null = null
     await act(async () => {
       const promise = result.current.capturePhoto()
-      jest.advanceTimersByTime(CAMERA_SNAPSHOT_TIMEOUT_MILLISECONDS + 1)
+      jest.advanceTimersByTime(CAMERA_SNAPSHOT_TIMEOUT_MS + 1)
       returnedUri = await promise
     })
 

@@ -17,7 +17,7 @@ import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { authService } from '../../services/AuthService/AuthService';
 import { LoginResponse } from '../../services/apiService/ApiService';
 import { styles } from './LoginScreen.styles';
-
+import { useNavigation } from '@react-navigation/native';
 import HeadLoginSvg from '../../../assets/svg/head_login.svg';
 import OrnamentLoginSvg from '../../../assets/svg/ornament_login.svg';
 
@@ -39,7 +39,7 @@ export default function LoginScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
+  const navigation = useNavigation();
   const handleSubmit = async () => {
     if (!email || !password) {
       showCustomToast({
@@ -53,14 +53,15 @@ export default function LoginScreen() {
 
     try {
       const response: LoginResponse = await authService.login(email, password);
+      console.log(response.data);
       showCustomToast({
         type: 'success',
         message: 'Login Successful',
       });
-
       // Aquí puedes navegar a la siguiente pantalla
       // navigation.navigate('HomeCamera');
       // usando response.isFirstLogin
+      (navigation as any).navigate('Home');
     } catch (error: any) {
       console.log(error);
       setErrorMessage(

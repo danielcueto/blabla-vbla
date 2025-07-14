@@ -1,24 +1,17 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import Config from 'react-native-config';
+import { API_BASE_URL, REQUEST_TIMEOUT_MS } from '../../config/config';
 import { storageService } from '../StorageService/StorageService';
+import type { LoginRequest, LoginResponse, ApiResponse } from '../../types/api';
 
-export interface LoginRequest {
-  username: string;
-  password: string;
-}
-
-export interface LoginResponse {
-  access_token: string;
-  isFirstLogin: boolean;
-}
+export type { LoginRequest, LoginResponse, ApiResponse };
 
 class ApiService {
   private api: AxiosInstance;
 
   constructor() {
     this.api = axios.create({
-      baseURL: Config.API_BASE_URL || 'http://10.0.2.2:3000',
-      timeout: Number(Config.API_TIMEOUT) || 15000,
+      baseURL: API_BASE_URL,
+      timeout: REQUEST_TIMEOUT_MS,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -26,24 +19,69 @@ class ApiService {
       validateStatus: (status) => status >= 200 && status < 300,
     });
 
-    this.api.interceptors.request.use(async (config) => {
-      const token = await storageService.getToken();
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+    // Request interceptor for adding auth token
+    this.api.interceptors.request.use(
+      async (config) => {
+        const token = await storageService.getToken();
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
       }
-      return config;
-    });
+    );
+
+    // Response interceptor for handling common errors
+    this.api.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        // Log error details for debugging
+        console.error('API Error:', {
+          message: error.message,
+          code: error.code,
+          status: error.response?.status,
+          data: error.response?.data,
+          url: error.config?.url,
+        });
+        return Promise.reject(error);
+      }
+    );
   }
 
   async login(credentials: LoginRequest): Promise<LoginResponse> {
     try {
       const res = await this.api.post<LoginResponse>('/auth/login', credentials);
-      if (!res.data.access_token) {
+      
+      if (res.data.code !== 200 || res.data.status !== 'success') {
+        throw new Error(res.data.message || 'Login failed');
+      }
+      
+      if (!res.data.data.access_token) {
         throw new Error('Invalid response from server. Missing access token.');
       }
+      
       return res.data;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      // Enhanced error handling for better debugging
+      if (error.code === 'ECONNABORTED') {
+        throw new Error('Request timeout. Please check your internet connection and try again.');
+      }
+      if (error.code === 'NETWORK_ERROR' || error.message === 'Network Error') {
+        throw new Error('Network error. Please check your internet connection.');
+      }
+      if (error.response) {
+        // Server responded with error status
+        const message = error.response.data?.message || error.response.statusText || 'Server error';
+        throw new Error(`Server error (${error.response.status}): ${message}`);
+      }
+      if (error.request) {
+        // Request was made but no response received
+        throw new Error('No response from server. Please check your internet connection.');
+      }
+      // Something else happened
+      throw new Error(error.message || 'An unexpected error occurred');
     }
   }
   
@@ -69,3 +107,4 @@ class ApiService {
 }
 
 export const apiService = new ApiService();
+ 

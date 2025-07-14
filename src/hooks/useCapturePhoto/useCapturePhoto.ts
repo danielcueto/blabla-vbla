@@ -3,7 +3,7 @@ import type { RefObject } from 'react'
 import { Camera } from 'react-native-vision-camera'
 import { withTimeout } from '../../utils/withTimeout'
 import {
-  CAMERA_SNAPSHOT_TIMEOUT_MILLISECONDS,
+  CAMERA_SNAPSHOT_TIMEOUT_MS,
   CAMERA_SNAPSHOT_QUALITY_PERCENT,
 } from '../../config/config'
 
@@ -47,7 +47,7 @@ export default function useCapturePhoto(
 
       const photoSnapshot = await withTimeout(
         cameraInstance.takeSnapshot({ quality: CAMERA_SNAPSHOT_QUALITY_PERCENT }),
-        CAMERA_SNAPSHOT_TIMEOUT_MILLISECONDS
+        CAMERA_SNAPSHOT_TIMEOUT_MS
       )
 
       if (!photoSnapshot?.path) {

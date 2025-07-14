@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import type { AsyncFunction } from '../../types/common'
 import { withTimeout } from '../../utils/withTimeout'
-import { REQUEST_TIMEOUT_MILLISECONDS } from '../../config/config'
+import { REQUEST_TIMEOUT_MS } from '../../config/config'
 
 /**
  * The result returned by `useSafeAsync`.
@@ -33,7 +33,7 @@ export interface SafeAsyncResult<T> {
  */
 export default function useSafeAsync<T>(
   asyncOperation: AsyncFunction<unknown[], T>,
-  timeoutInMilliseconds = REQUEST_TIMEOUT_MILLISECONDS
+  timeoutInMilliseconds = REQUEST_TIMEOUT_MS
 ): SafeAsyncResult<T> {
   const [isOperationInProgress, setIsOperationInProgress] = useState(false)
   const [operationErrorMessage, setOperationErrorMessage] = useState<string | null>(null)

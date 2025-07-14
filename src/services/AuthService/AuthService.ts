@@ -1,4 +1,5 @@
-import { apiService, LoginRequest, LoginResponse } from '../apiService/ApiService';
+import { apiService } from '../apiService/ApiService';
+import type { LoginRequest, LoginResponse } from '../apiService/ApiService';
 import { storageService, UserData } from '../StorageService/StorageService';
 
 export interface AuthState {
@@ -14,9 +15,10 @@ class AuthService {
 
       const response = await apiService.login(loginData);
 
-      await storageService.saveToken(response.access_token);
+      // Acceder a los datos anidados en la nueva estructura
+      await storageService.saveToken(response.data.access_token);
       await storageService.saveUserData({
-        isFirstLogin: response.isFirstLogin,
+        isFirstLogin: response.data.isFirstLogin,
       });
 
       return response;

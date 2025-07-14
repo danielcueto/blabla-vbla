@@ -56,8 +56,13 @@ describe('useAuth', () => {
     
     // El servicio de login devuelve un token y datos de usuario
     mockedAuthService.login.mockResolvedValueOnce({
-      access_token: 'fake-token',
-      isFirstLogin: true,
+      code: 200,
+      status: 'success',
+      message: 'Login successful',
+      data: {
+        access_token: 'fake-token',
+        isFirstLogin: true,
+      },
     });
 
     // Después del login, checkAuthStatus encontrará un usuario

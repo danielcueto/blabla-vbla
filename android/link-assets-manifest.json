@@ -1,0 +1,161 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Gilroy-Black.ttf",
+      "sha1": "41d7d53d34ae67d9dc54979abee04f3514163740"
+    },
+    {
+      "path": "assets/fonts/Gilroy-BlackItalic.ttf",
+      "sha1": "3f16053efbb2fba78e7cc3722e2ffd8beddb862d"
+    },
+    {
+      "path": "assets/fonts/Gilroy-Bold.ttf",
+      "sha1": "7fe4d8cf5325dd47363d0f80fefb40ac7df5d5a6"
+    },
+    {
+      "path": "assets/fonts/Gilroy-BoldItalic.ttf",
+      "sha1": "9d242712b00aa14b76df6b0526957679a0dd4f13"
+    },
+    {
+      "path": "assets/fonts/Gilroy-ExtraBold.ttf",
+      "sha1": "eb2b7042895e0fe98ea023f3e45048f9d152127e"
+    },
+    {
+      "path": "assets/fonts/Gilroy-ExtraBoldItalic.ttf",
+      "sha1": "3fa4b88b9e55088d5a38d8ada83732452951f514"
+    },
+    {
+      "path": "assets/fonts/Gilroy-Heavy.ttf",
+      "sha1": "3e47b596a6cc4ad3ac4f79353c4bddc987bc84bc"
+    },
+    {
+      "path": "assets/fonts/Gilroy-HeavyItalic.ttf",
+      "sha1": "71d5083e3895c1857d2e4c73a2e65731061d43f9"
+    },
+    {
+      "path": "assets/fonts/Gilroy-Light.ttf",
+      "sha1": "510faebaff56ce8b518fc84bdd1aefeefae00b65"
+    },
+    {
+      "path": "assets/fonts/Gilroy-LightItalic.ttf",
+      "sha1": "1ead29f40523006583d1813c0b2f50c872216ed3"
+    },
+    {
+      "path": "assets/fonts/Gilroy-Medium.ttf",
+      "sha1": "d7f893124bd4fff78805e69df31385ae113368be"
+    },
+    {
+      "path": "assets/fonts/Gilroy-MediumItalic.ttf",
+      "sha1": "5993ba5a055534b7b6fe766d063650767e6929ac"
+    },
+    {
+      "path": "assets/fonts/Gilroy-Regular.ttf",
+      "sha1": "a737c19356e50cb9a50eb64ca7446c80dd3aa3e3"
+    },
+    {
+      "path": "assets/fonts/Gilroy-RegularItalic.ttf",
+      "sha1": "849c9d5af9b98915b9a2961b92365e793f1b756e"
+    },
+    {
+      "path": "assets/fonts/Gilroy-SemiBold.ttf",
+      "sha1": "8663a356eb9bc23b77696208f74376daf59687ea"
+    },
+    {
+      "path": "assets/fonts/Gilroy-SemiBoldItalic.ttf",
+      "sha1": "6eeadaaadf79773e8630aabb17a2b0b8a48b94b5"
+    },
+    {
+      "path": "assets/fonts/Gilroy-Thin.ttf",
+      "sha1": "af4998778ceb58ef38ff3fe5441eec696cb970dc"
+    },
+    {
+      "path": "assets/fonts/Gilroy-ThinItalic.ttf",
+      "sha1": "3cfc68dab2b878451f4334981e8d5e2a84fc3698"
+    },
+    {
+      "path": "assets/fonts/Gilroy-UltraLight.ttf",
+      "sha1": "1cfbfa447c336558c8ab3389bb11015adebf744f"
+    },
+    {
+      "path": "assets/fonts/Gilroy-UltraLightItalic.ttf",
+      "sha1": "594654ca331a2b85349e9fe36b87fdf9b86ff4c8"
+    },
+    {
+      "path": "assets/fonts/vector-icons/AntDesign.ttf",
+      "sha1": "4e77868439280fb434d4697c7b911271406c81f3"
+    },
+    {
+      "path": "assets/fonts/vector-icons/Entypo.ttf",
+      "sha1": "12b5670eb178138f77285d5f2c246d3cc5fa67d6"
+    },
+    {
+      "path": "assets/fonts/vector-icons/EvilIcons.ttf",
+      "sha1": "91d377ea3cf47490b256c2ed081704a7dabdae0c"
+    },
+    {
+      "path": "assets/fonts/vector-icons/Feather.ttf",
+      "sha1": "e6604258b1ced5efd51360875d782fca65381d47"
+    },
+    {
+      "path": "assets/fonts/vector-icons/FontAwesome.ttf",
+      "sha1": "13b1eab65a983c7a73bc7997c479d66943f7c6cb"
+    },
+    {
+      "path": "assets/fonts/vector-icons/FontAwesome5_Brands.ttf",
+      "sha1": "3fa2d67cef22da5c3f3eb5730c6afbd6fecf0372"
+    },
+    {
+      "path": "assets/fonts/vector-icons/FontAwesome5_Regular.ttf",
+      "sha1": "7d849a3981a716e2ba4a84634bc57d0b8054a6a3"
+    },
+    {
+      "path": "assets/fonts/vector-icons/FontAwesome5_Solid.ttf",
+      "sha1": "c1b9fae262f42868c075ac865a8ab34920e20a2c"
+    },
+    {
+      "path": "assets/fonts/vector-icons/FontAwesome6_Brands.ttf",
+      "sha1": "7ce89c71d5a51ac65b159c71422783dd86529c66"
+    },
+    {
+      "path": "assets/fonts/vector-icons/FontAwesome6_Regular.ttf",
+      "sha1": "775e2ecfc18d22b177274453d4c014ca6be63208"
+    },
+    {
+      "path": "assets/fonts/vector-icons/FontAwesome6_Solid.ttf",
+      "sha1": "2b8e11389d98122399667cf64941eb58497dc128"
+    },
+    {
+      "path": "assets/fonts/vector-icons/Fontisto.ttf",
+      "sha1": "c090a3ec96a3f1bb9b615c2f3f204ce0dcdcdbc3"
+    },
+    {
+      "path": "assets/fonts/vector-icons/Foundation.ttf",
+      "sha1": "4b2bce6c792493a4a5716b6fec2dbefe89492c3f"
+    },
+    {
+      "path": "assets/fonts/vector-icons/Ionicons.ttf",
+      "sha1": "86e07c3d974eb09099e6e5a9b3b8310303cf0feb"
+    },
+    {
+      "path": "assets/fonts/vector-icons/MaterialCommunityIcons.ttf",
+      "sha1": "4c2a838b00dbb5e8bb1b368fce0de534e8eb241c"
+    },
+    {
+      "path": "assets/fonts/vector-icons/MaterialIcons.ttf",
+      "sha1": "7e02c3f005532ff4d24148567c84089756a7848a"
+    },
+    {
+      "path": "assets/fonts/vector-icons/Octicons.ttf",
+      "sha1": "56acefc0731f35ee23b195b1c8cb5fa94a0db97b"
+    },
+    {
+      "path": "assets/fonts/vector-icons/SimpleLineIcons.ttf",
+      "sha1": "9ffb81a5a11112e292f2cc323e98486bad597599"
+    },
+    {
+      "path": "assets/fonts/vector-icons/Zocial.ttf",
+      "sha1": "6a48a962b06cc3acbdfd61df0d9a34744eea5e8d"
+    }
+  ]
+}

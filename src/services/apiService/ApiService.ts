@@ -5,10 +5,25 @@ import type { LoginRequest, LoginResponse, ApiResponse } from '../../types/api';
 
 export type { LoginRequest, LoginResponse, ApiResponse };
 
+/**
+ * Main service for all API communications
+ * Automatically handles:
+ * - Authentication via JWT tokens
+ * - Headers and timeouts configuration
+ * - Centralized error handling
+ * - Request and response interceptors
+ */
 class ApiService {
   private api: AxiosInstance;
 
   constructor() {
+    /**
+     * Axios instance configured with:
+     * - API base URL
+     * - Request timeout
+     * - Default headers for JSON
+     * - Successful status codes validation
+     */
     this.api = axios.create({
       baseURL: API_BASE_URL,
       timeout: REQUEST_TIMEOUT_MS,
@@ -19,7 +34,11 @@ class ApiService {
       validateStatus: (status) => status >= 200 && status < 300,
     });
 
-    // Request interceptor for adding auth token
+    /**
+     * Request interceptor that automatically adds authentication token
+     * Executes before each HTTP request to include Bearer token
+     * if one exists in local storage
+     */
     this.api.interceptors.request.use(
       async (config) => {
         const token = await storageService.getToken();
@@ -33,7 +52,10 @@ class ApiService {
       }
     );
 
-    // Response interceptor for handling common errors
+    /**
+     * Response interceptor that handles errors centrally
+     * Provides detailed logging for debugging and consistent error handling
+     */
     this.api.interceptors.response.use(
       (response) => response,
       (error) => {
@@ -50,14 +72,22 @@ class ApiService {
     );
   }
 
+  /**
+   * Performs user login on the server
+   * @param credentials - Object with username and password
+   * @returns Promise with login response including access_token
+   * @throws Error with descriptive message if login fails
+   */
   async login(credentials: LoginRequest): Promise<LoginResponse> {
     try {
       const res = await this.api.post<LoginResponse>('/auth/login', credentials);
       
+      // Validate that response has expected format
       if (res.data.code !== 200 || res.data.status !== 'success') {
         throw new Error(res.data.message || 'Login failed');
       }
       
+      // Validate that token is present in response
       if (!res.data.data.access_token) {
         throw new Error('Invalid response from server. Missing access token.');
       }
@@ -85,6 +115,11 @@ class ApiService {
     }
   }
   
+  /**
+   * Generic HTTP methods that use the configured Axios instance
+   * All automatically include authentication token if available
+   */
+  
   get<T>(url: string, config?: AxiosRequestConfig) {
     return this.api.get<T>(url, config);
   }
@@ -106,5 +141,9 @@ class ApiService {
   }
 }
 
+/**
+ * Singleton instance of the API service
+ * Exported for use throughout the application
+ */
 export const apiService = new ApiService();
  

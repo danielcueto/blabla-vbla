@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View,
   Image,
@@ -14,8 +14,7 @@ import { Label } from '../../components/common/Label';
 import { Input } from '../../components/common/Input';
 import { Button } from '../../components/common/Button';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
-import { authService } from '../../services/AuthService/AuthService';
-import { LoginResponse } from '../../services/apiService/ApiService';
+import { useAuth } from '../../hooks/useAuth/useAuth';
 import { styles } from './LoginScreen.styles';
 import { useNavigation } from '@react-navigation/native';
 import HeadLoginSvg from '../../../assets/svg/head_login.svg';
@@ -36,10 +35,34 @@ const getKeyboardOffset = () => {
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const navigation = useNavigation();
+  const { isAuthenticated, isLoading, login } = useAuth();
+
+  /**
+   * Effect that checks if user is already authenticated
+   * If authenticated, automatically redirects to home screen
+   * This prevents authenticated users from seeing the login screen
+   */
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      (navigation as any).navigate('Home');
+    }
+  }, [isAuthenticated, isLoading, navigation]);
+
+  /**
+   * If still checking authentication status, show loading state
+   * This prevents flash of login screen for authenticated users
+   */
+  if (isLoading) {
+    return (
+      <View style={[styles.container, styles.loadingContainer]}>
+        <Label color="pureWhite" size="large">Loading...</Label>
+      </View>
+    );
+  }
   const handleSubmit = async () => {
     if (!email || !password) {
       showCustomToast({
@@ -49,27 +72,24 @@ export default function LoginScreen() {
       return;
     }
 
-    setIsLoading(true);
+    setIsSubmitting(true);
 
     try {
-      const response: LoginResponse = await authService.login(email, password);
-      console.log(response.data);
+      await login(email, password);
       showCustomToast({
         type: 'success',
         message: 'Login Successful',
       });
-      // Aquí puedes navegar a la siguiente pantalla
-      // navigation.navigate('HomeCamera');
-      // usando response.isFirstLogin
-      (navigation as any).navigate('Home');
+      // Navigation will be handled automatically by useEffect when isAuthenticated changes
+      // No need to manually navigate here as the auth context will update
     } catch (error: any) {
       console.log(error);
       setErrorMessage(
-        'We found some errores. Please review the fields and make corrections',
+        'We found some errors. Please review the fields and make corrections',
       );
       setShowErrorMessage(true);
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -133,9 +153,9 @@ export default function LoginScreen() {
               />
 
               <Button
-                text={isLoading ? 'Login...' : 'Login'}
+                text={isSubmitting ? 'Login...' : 'Login'}
                 fullWidth={true}
-                isLoading={isLoading}
+                isLoading={isSubmitting}
                 onPress={handleSubmit}
                 style={styles.submitButton}
               />

@@ -55,4 +55,8 @@ export const styles = StyleSheet.create({
   testButton: {
     marginTop: 8,
   },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });

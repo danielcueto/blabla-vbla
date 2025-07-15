@@ -2,7 +2,10 @@ import { renderHook, act, waitFor } from '@testing-library/react-native';
 import { useAuth } from '../useAuth';
 import { authService } from '../../../services/AuthService/AuthService';
 
-// El mock de Jest para el servicio es idéntico y no necesita cambios.
+/**
+ * Mock the AuthService module to isolate the hook testing
+ * This ensures we test only the hook logic, not the service implementation
+ */
 jest.mock('../../../services/AuthService/AuthService', () => {
   return {
     authService: {
@@ -15,16 +18,28 @@ jest.mock('../../../services/AuthService/AuthService', () => {
   };
 });
 
+/**
+ * Test suite for the useAuth custom hook
+ * Tests all authentication state management functionality
+ */
 describe('useAuth', () => {
-  // Tipamos el mock para tener autocompletado y seguridad de tipos.
+  // Type the mock for better intellisense and type safety
   const mockedAuthService = authService as jest.Mocked<typeof authService>;
 
+  /**
+   * Reset all mocks before each test to prevent test interference
+   * This ensures each test starts with a clean slate
+   */
   beforeEach(() => {
-    // Limpiamos los mocks antes de cada test para evitar interferencias.
     jest.clearAllMocks();
   });
 
-  it('debería inicializar en estado de carga (loading) y luego resolver', async () => {
+  /**
+   * Test: Hook should initialize in loading state and then resolve
+   * Verifies the initial loading behavior and state transition
+   */
+  it('should initialize in loading state and then resolve', async () => {
+    // Mock the initial auth status check to return unauthenticated state
     mockedAuthService.checkAuthStatus.mockResolvedValueOnce({
       isAuthenticated: false,
       isLoading: false,
@@ -33,28 +48,32 @@ describe('useAuth', () => {
 
     const { result } = renderHook(() => useAuth());
 
-    // 1. El hook debe empezar con isLoading = true
+    // 1. Hook should start with isLoading = true
     expect(result.current.isLoading).toBe(true);
 
-    // 2. Esperamos a que la comprobación inicial termine
+    // 2. Wait for the initial check to complete
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
     });
 
-    // 3. Verificamos el estado final después de la carga
+    // 3. Verify the final state after loading
     expect(result.current.isAuthenticated).toBe(false);
     expect(result.current.user).toBeNull();
   });
 
-  it('debería hacer login exitosamente y actualizar el estado', async () => {
-    // Estado inicial antes del login
+  /**
+   * Test: Should successfully login and update state
+   * Verifies the complete login flow and state updates
+   */
+  it('should successfully login and update state', async () => {
+    // Mock initial state before login (unauthenticated)
     mockedAuthService.checkAuthStatus.mockResolvedValueOnce({
       isAuthenticated: false,
       isLoading: false,
       user: null,
     });
     
-    // El servicio de login devuelve un token y datos de usuario
+    // Mock successful login response with token and user data
     mockedAuthService.login.mockResolvedValueOnce({
       code: 200,
       status: 'success',
@@ -65,7 +84,7 @@ describe('useAuth', () => {
       },
     });
 
-    // Después del login, checkAuthStatus encontrará un usuario
+    // After login, checkAuthStatus should find an authenticated user
     mockedAuthService.checkAuthStatus.mockResolvedValueOnce({
       isAuthenticated: true,
       isLoading: false,
@@ -74,71 +93,80 @@ describe('useAuth', () => {
 
     const { result } = renderHook(() => useAuth());
 
-    // Esperamos a que la carga inicial termine
+    // Wait for initial loading to complete
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 
-    // Ejecutamos la acción de login dentro de act() porque actualiza el estado
+    // Execute login action within act() since it updates state
     await act(async () => {
       await result.current.login('user', 'pass');
     });
 
-    // Verificamos que el estado se haya actualizado correctamente
+    // Verify state has been updated correctly
     expect(result.current.isAuthenticated).toBe(true);
     expect(result.current.user).toEqual({ isFirstLogin: true });
     expect(result.current.isLoading).toBe(false);
   });
 
-  it('debería hacer logout y limpiar el estado', async () => {
-    // El usuario empieza autenticado
+  /**
+   * Test: Should logout and clear state
+   * Verifies the logout flow and state cleanup
+   */
+  it('should logout and clear state', async () => {
+    // Mock initial authenticated state
     mockedAuthService.checkAuthStatus.mockResolvedValueOnce({
       isAuthenticated: true,
       isLoading: false,
       user: { isFirstLogin: false },
     });
 
+    // Mock successful logout
     mockedAuthService.logout.mockResolvedValue();
-
     const { result } = renderHook(() => useAuth());
 
-    // Esperamos a que cargue el estado autenticado
+    // Wait for authenticated state to load
     await waitFor(() => expect(result.current.isAuthenticated).toBe(true));
 
-    // Ejecutamos el logout
+    // Execute logout
     await act(async () => {
       await result.current.logout();
     });
 
-    // Verificamos que el estado se haya limpiado
+    // Verify state has been cleared
     expect(result.current.isAuthenticated).toBe(false);
     expect(result.current.user).toBeNull();
     expect(result.current.isLoading).toBe(false);
   });
 
-  it('debería manejar un error de login y mantener el estado anterior', async () => {
+  /**
+   * Test: Should handle login error and maintain previous state
+   * Verifies error handling during failed login attempts
+   */
+  it('should handle login error and maintain previous state', async () => {
+    // Mock initial unauthenticated state
     mockedAuthService.checkAuthStatus.mockResolvedValueOnce({
       isAuthenticated: false,
       isLoading: false,
       user: null,
     });
 
-    // El login ahora falla
+    // Mock failed login with error
     mockedAuthService.login.mockRejectedValueOnce(
       new Error('Invalid credentials'),
     );
 
     const { result } = renderHook(() => useAuth());
 
-    // Esperamos a que termine la carga inicial
+    // Wait for initial loading to complete
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 
-    // Esperamos que la función de login lance una excepción
+    // Expect login function to throw an exception
     await act(async () => {
       await expect(result.current.login('wrong', 'creds')).rejects.toThrow(
         'Invalid credentials',
       );
     });
 
-    // Verificamos que el estado NO haya cambiado
+    // Verify state has NOT changed after failed login
     expect(result.current.isAuthenticated).toBe(false);
     expect(result.current.user).toBeNull();
     expect(result.current.isLoading).toBe(false);

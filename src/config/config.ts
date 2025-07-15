@@ -55,10 +55,3 @@ if (APP_ENV === 'production' && !API_BASE_URL.startsWith('https://')) {
     '[config] API_BASE_URL must start with "https://" in production mode.'
   )
 }
-
-console.log(`[config] API_BASE_URL: ${API_BASE_URL}`)
-console.log(`[config] IS_DEVELOPMENT_MODE: ${IS_DEVELOPMENT_MODE}`)
-console.log(`[config] REQUEST_TIMEOUT_MS: ${REQUEST_TIMEOUT_MS}`)
-console.log(`[config] CAMERA_SNAPSHOT_TIMEOUT_MS: ${CAMERA_SNAPSHOT_TIMEOUT_MS}`)
-console.log(`[config] ASYNC_OPERATION_TIMEOUT_MS: ${ASYNC_OPERATION_TIMEOUT_MS}`)
-console.log(`[config] CAMERA_SNAPSHOT_QUALITY_PERCENT: ${CAMERA_SNAPSHOT_QUALITY_PERCENT}`)

@@ -73,7 +73,13 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
-.env
-src/config/.env
 
+#a
+# Ignorar el env de la carpeta config
+/src/config/.env
+
+#vscode config
 .vscode
+
+#Gemfile
+Gemfile

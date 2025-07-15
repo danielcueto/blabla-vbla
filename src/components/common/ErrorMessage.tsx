@@ -1,8 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import {
-  View,
-  StyleSheet,
-} from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -32,7 +29,7 @@ export function ErrorMessage({
 
   const hideMessage = useCallback(() => {
     opacity.value = withTiming(0, { duration: 300 });
-    translateY.value = withTiming(-100, { duration: 300 }, (finished) => {
+    translateY.value = withTiming(-100, { duration: 300 }, finished => {
       if (finished) {
         runOnJS(onHide)();
       }
@@ -68,12 +65,7 @@ export function ErrorMessage({
   }
 
   return (
-    <Animated.View
-      style={[
-        styles.container,
-        animatedStyle,
-      ]}
-    >
+    <Animated.View style={[styles.container, animatedStyle]}>
       <View style={styles.errorMessage}>
         <View style={styles.iconContainer}>
           <FontAwesomeIcon

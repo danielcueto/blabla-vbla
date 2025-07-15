@@ -1,4 +1,4 @@
-import React, { JSX, useRef, useState } from 'react'
+import React, { JSX, useRef, useState } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -6,34 +6,34 @@ import {
   ActivityIndicator,
   Text,
   useWindowDimensions,
-} from 'react-native'
-import { Camera, useCameraDevices } from 'react-native-vision-camera'
-import FAIcon from 'react-native-vector-icons/FontAwesome5'
-import DeviceInfo from 'react-native-device-info'
-import Toast from 'react-native-toast-message'
-import { useNavigation } from '@react-navigation/native'
-import  useEnsureCameraPermission  from '../../hooks/useEnsureCameraPermission/useEnsureCameraPermission'
-import { useCapturePhoto } from '../../hooks/useCapturePhoto'
-import { styles } from './CameraView.styles' 
-import { Button } from '../common/Button'
+} from 'react-native';
+import { Camera, useCameraDevices } from 'react-native-vision-camera';
+import FAIcon from 'react-native-vector-icons/FontAwesome5';
+import DeviceInfo from 'react-native-device-info';
+import Toast from 'react-native-toast-message';
+import { useNavigation } from '@react-navigation/native';
+import useEnsureCameraPermission from '../../hooks/useEnsureCameraPermission/useEnsureCameraPermission';
+import { useCapturePhoto } from '../../hooks/useCapturePhoto';
+import { styles } from './CameraView.styles';
+import { Button } from '../common/Button';
 
-import { useAuth } from '../../hooks/useAuth'
+import { useAuth } from '../../hooks/useAuth';
 
 export default function CameraView(): JSX.Element {
-  const hasPermission = useEnsureCameraPermission()
-  const camRef = useRef<Camera | null>(null)
-  const { capturePhoto, isCapturing } = useCapturePhoto(camRef)
-  const isSimulator = DeviceInfo.isEmulatorSync()
-  const { width, height } = useWindowDimensions()
-  const navigation = useNavigation()
+  const hasPermission = useEnsureCameraPermission();
+  const camRef = useRef<Camera | null>(null);
+  const { capturePhoto, isCapturing } = useCapturePhoto(camRef);
+  const isSimulator = DeviceInfo.isEmulatorSync();
+  const { width, height } = useWindowDimensions();
+  const navigation = useNavigation();
 
-  const devices = useCameraDevices()
+  const devices = useCameraDevices();
   const device = !isSimulator
-  ? devices.find(cameraDevice => cameraDevice.position === 'back')
-  ?? devices.find(cameraDevice => cameraDevice.position === 'front')
-  : undefined
-  
-  const [previewUri, setPreviewUri] = useState<string | null>(null)
+    ? devices.find(cameraDevice => cameraDevice.position === 'back') ??
+      devices.find(cameraDevice => cameraDevice.position === 'front')
+    : undefined;
+
+  const [previewUri, setPreviewUri] = useState<string | null>(null);
   const { logout } = useAuth();
   if (!hasPermission) {
     return (
@@ -43,7 +43,7 @@ export default function CameraView(): JSX.Element {
           Requesting camera permissions...
         </Text>
       </View>
-    )
+    );
   }
 
   const handleCapture = async (): Promise<void> => {
@@ -51,41 +51,49 @@ export default function CameraView(): JSX.Element {
       Toast.show({
         type: 'info',
         text1: 'Capture not available.',
-        position:'bottom',
-      })
-      return
+        position: 'bottom',
+      });
+      return;
     }
 
-    const uri = await capturePhoto()
+    const uri = await capturePhoto();
     if (uri) {
-      setPreviewUri(uri)
-      Toast.show({ type: 'success', text1: 'Photo captured!', position: 'bottom' })
+      setPreviewUri(uri);
+      Toast.show({
+        type: 'success',
+        text1: 'Photo captured!',
+        position: 'bottom',
+      });
     } else {
-      Toast.show({ type: 'error', text1: 'Failed to take photo.', position: 'bottom' })
+      Toast.show({
+        type: 'error',
+        text1: 'Failed to take photo.',
+        position: 'bottom',
+      });
     }
-  }
+  };
 
   const handleRetake = (): void => {
-    setPreviewUri(null)
-  }
+    setPreviewUri(null);
+  };
 
   const handleLogout = async (): Promise<void> => {
     try {
-      await logout()
-      ;(navigation as any).navigate('LoginScreen')
+      await logout();
+      (navigation as any).navigate('LoginScreen');
     } catch (error) {
-      console.error('Error during logout:', error)
-      Toast.show({ 
-        type: 'error', 
-        text1: 'Logout failed', 
+      console.error('Error during logout:', error);
+      Toast.show({
+        type: 'error',
+        text1: 'Logout failed',
         text2: 'Please try again',
-        position: 'bottom' 
-      })
+        position: 'bottom',
+      });
     }
-  }
+  };
 
-  const captureButtonOffset = height * 0.08
-  const retakeButtonOffset = width * 0.05
+  const captureButtonOffset = height * 0.08;
+  const retakeButtonOffset = width * 0.05;
 
   return (
     <View style={styles.container}>
@@ -147,9 +155,13 @@ export default function CameraView(): JSX.Element {
           >
             <FAIcon name="camera" size={36} color="#FFF" />
           </TouchableOpacity>
-          <Button text='Logout' style={{position: 'absolute', top: 10, right: 10, width: 100}} onPress={handleLogout}/>
+          <Button
+            text="Logout"
+            style={{ position: 'absolute', top: 10, right: 10, width: 100 }}
+            onPress={handleLogout}
+          />
         </>
       )}
     </View>
-  )
+  );
 }

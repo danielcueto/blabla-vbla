@@ -53,7 +53,11 @@ const toastConfig = {
   info: (props: any) => (
     <View style={[styles.baseToast, styles.infoColors]}>
       <View style={[styles.iconContainer, styles.infoIconContainer]}>
-        <FontAwesomeIcon icon={faInfoCircle} size={20} color={colors.pureWhite} />
+        <FontAwesomeIcon
+          icon={faInfoCircle}
+          size={20}
+          color={colors.pureWhite}
+        />
       </View>
       <View style={styles.baseContainer}>
         <Label size="small" family="semiBold" color="pureWhite">

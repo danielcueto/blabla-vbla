@@ -1,13 +1,3 @@
 {
-  "extends": "@react-native/typescript-config",
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@env": ["src/config/env.d.ts"]
-    }
-  },
-  "include": [
-    "src",
-    "src/config/env.d.ts"
-  ]
+  "extends": "@react-native/typescript-config"
 }

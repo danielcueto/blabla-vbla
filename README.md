@@ -69,7 +69,7 @@ Before running this project, ensure you have the following installed:
    DEVELOPMENT_IOS_API_BASE_URL=http://localhost:3000/api
 
    # Environment Configuration
-   APP_ENV=development
+   NODE_ENV=development
 
    # Timeout Settings (in milliseconds)
    REQUEST_TIMEOUT=10000

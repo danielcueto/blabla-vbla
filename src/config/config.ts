@@ -3,7 +3,7 @@ import {
   REACT_NATIVE_API_BASE_URL,
   DEVELOPMENT_ANDROID_API_BASE_URL,
   DEVELOPMENT_IOS_API_BASE_URL,
-  APP_ENV,
+  NODE_ENV,
   REQUEST_TIMEOUT,
   CAMERA_SNAPSHOT_TIMEOUT,
   ASYNC_OP_TIMEOUT,
@@ -26,14 +26,14 @@ function getDefaultDevHost(): string {
  * - En desarrollo: toma la URL adecuada para el emulador/simulador.
  */
 export const API_BASE_URL: string = 
-  APP_ENV === 'production'
+  NODE_ENV === 'production'
     ? REACT_NATIVE_API_BASE_URL
     : getDefaultDevHost()
 
 /**
  * Flag si estamos en entorno distinto a producción.
  */
-export const IS_DEVELOPMENT_MODE = APP_ENV !== 'production'
+export const IS_DEVELOPMENT_MODE = NODE_ENV !== 'production'
 
 /**
  * Timeouts (milisegundos).
@@ -50,7 +50,7 @@ export const CAMERA_SNAPSHOT_QUALITY_PERCENT = parseInt(SNAPSHOT_QUALITY, 10) ||
 /**
  * En producción, forzar HTTPS.
  */
-if (APP_ENV === 'production' && !API_BASE_URL.startsWith('https://')) {
+if (NODE_ENV === 'production' && !API_BASE_URL.startsWith('https://')) {
   throw new Error(
     '[config] API_BASE_URL must start with "https://" in production mode.'
   )

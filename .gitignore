@@ -2,6 +2,7 @@
 #
 .DS_Store
 
+ios
 # Xcode
 #
 build/
@@ -83,3 +84,4 @@ yarn-error.log
 
 #Gemfile
 Gemfile
+Gemfile.lock

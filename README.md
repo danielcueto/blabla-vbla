@@ -52,12 +52,12 @@ Before running this project, ensure you have the following installed:
 1. **Create environment file**
    ```bash
    # Copy the example file and rename it
-   cp .env.example .env
-   # On Windows: copy .env.example .env
+   cp src/config/.env.example src/config/.env
+   # On Windows: copy src/config/.env.example src/config/.env
    ```
 
 2. **Configure environment variables**
-   Edit your `.env` file with your specific values:
+   Edit your `src/config/.env` file with your specific values:
 
    ```env
    # API Configuration
@@ -84,8 +84,11 @@ Before running this project, ensure you have the following installed:
 
 ```
 app/
-├── .env                    # Main environment file (DO NOT COMMIT)
-├── .env.example           # Example file (commit to repo)
+├── src/
+│   ├── config/
+│   │   ├── .env                    # Main environment file (DO NOT COMMIT)
+│   │   ├── .env.example           # Example file (commit to repo)
+│   │   └── config.ts              # Configuration loader
 ```
 
 ### Important Notes
@@ -172,7 +175,7 @@ npm run ios
 ```
 
 #### Environment variables not loading
-- Ensure `.env` file is in the root directory
+- Ensure `.env` file is in the `src/config/` directory
 - Restart Metro bundler after changing environment variables
 - Check that variable names match exactly (case-sensitive)
 

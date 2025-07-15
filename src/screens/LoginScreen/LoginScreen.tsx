@@ -35,7 +35,6 @@ const getKeyboardOffset = () => {
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const navigation = useNavigation();
@@ -56,13 +55,7 @@ export default function LoginScreen() {
    * If still checking authentication status, show loading state
    * This prevents flash of login screen for authenticated users
    */
-  if (isLoading) {
-    return (
-      <View style={[styles.container, styles.loadingContainer]}>
-        <Label color="pureWhite" size="large">Loading...</Label>
-      </View>
-    );
-  }
+
   const handleSubmit = async () => {
     if (!email || !password) {
       showCustomToast({
@@ -71,8 +64,6 @@ export default function LoginScreen() {
       });
       return;
     }
-
-    setIsSubmitting(true);
 
     try {
       await login(email, password);
@@ -88,8 +79,6 @@ export default function LoginScreen() {
         'We found some errors. Please review the fields and make corrections',
       );
       setShowErrorMessage(true);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -153,9 +142,9 @@ export default function LoginScreen() {
               />
 
               <Button
-                text={isSubmitting ? 'Login...' : 'Login'}
+                text={isLoading ? 'Login...' : 'Login'}
                 fullWidth={true}
-                isLoading={isSubmitting}
+                isLoading={isLoading}
                 onPress={handleSubmit}
                 style={styles.submitButton}
               />

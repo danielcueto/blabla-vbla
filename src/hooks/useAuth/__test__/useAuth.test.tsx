@@ -2,10 +2,7 @@ import { renderHook, act, waitFor } from '@testing-library/react-native';
 import { useAuth } from '../useAuth';
 import { authService } from '../../../services/AuthService/AuthService';
 
-/**
- * Mock the AuthService module to isolate the hook testing
- * This ensures we test only the hook logic, not the service implementation
- */
+
 jest.mock('../../../services/AuthService/AuthService', () => {
   return {
     authService: {

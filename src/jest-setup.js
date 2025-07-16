@@ -1,37 +1,54 @@
-import 'react-native-gesture-handler/jestSetup';
+require('react-native-gesture-handler/jestSetup.js');
 /* global jest */
-
-// ----------------- MÓDULOS NATIVE -----------------
-
-// Mock AsyncStorage
+jest.mock('react-native-reanimated', () => ({
+  default: {
+    View: 'Animated.View',
+    Text: 'Animated.Text',
+    ScrollView: 'Animated.ScrollView',
+    createAnimatedComponent: (component) => component,
+  },
+  useSharedValue: jest.fn(() => ({ value: 0 })),
+  useAnimatedStyle: jest.fn(() => ({})),
+  withTiming: jest.fn((value) => value),
+  withSpring: jest.fn((value) => value),
+  withDecay: jest.fn((value) => value),
+  runOnJS: jest.fn((fn) => fn),
+  interpolate: jest.fn(),
+}));
 jest.mock('@react-native-async-storage/async-storage', () => ({
-  setItem: jest.fn(),
-  getItem: jest.fn(),
-  removeItem: jest.fn(),
-  clear: jest.fn(),
-  getAllKeys: jest.fn(),
-  multiGet: jest.fn(),
-  multiSet: jest.fn(),
-  multiRemove: jest.fn(),
+  setItem: jest.fn(() => Promise.resolve()),
+  getItem: jest.fn(() => Promise.resolve(null)),
+  removeItem: jest.fn(() => Promise.resolve()),
+  clear: jest.fn(() => Promise.resolve()),
+  getAllKeys: jest.fn(() => Promise.resolve([])),
+  multiGet: jest.fn(() => Promise.resolve([])),
+  multiSet: jest.fn(() => Promise.resolve()),
+  multiRemove: jest.fn(() => Promise.resolve()),
 }));
-
-// Mock react-native-config
-jest.mock('react-native-config', () => ({
-  API_BASE_URL: 'http://test-api.com',
-  API_TIMEOUT: '10000',
+// Mock de variables de entorno (@env)
+jest.mock('@env', () => ({
+  REACT_NATIVE_API_BASE_URL: 'http://localhost:3000',
+  DEVELOPMENT_ANDROID_API_BASE_URL: 'http://localhost:3000',
+  DEVELOPMENT_IOS_API_BASE_URL: 'http://localhost:3000',
+  NODE_ENV: 'development',
+  REQUEST_TIMEOUT: '15000',
+  CAMERA_SNAPSHOT_TIMEOUT: '8000',
+  ASYNC_OP_TIMEOUT: '8000',
+  SNAPSHOT_QUALITY: '100',
+  GALLERY_PICK_TIMEOUT_MS: '3000',
+  EDGE_BUTTON_SIZE: '48',
+  CONTROLS_VERTICAL_OFFSET_RATIO: '0.08',
 }));
-
+// ----------------- MÓDULOS NATIVE -----------------
 jest.mock('react-native-device-info', () => ({
   isEmulatorSync: jest.fn(() => false),
 }));
-
 jest.mock('react-native-vision-camera', () => {
   const React = require('react');
   const MockCamera = React.forwardRef((props, ref) =>
-    React.createElement(React.Fragment, null, props.children)
+    React.createElement(React.Fragment, null, props.children),
   );
   MockCamera.displayName = 'MockCamera';
-
   return {
     __esModule: true,
     Camera: MockCamera,
@@ -39,41 +56,23 @@ jest.mock('react-native-vision-camera', () => {
     useFrameProcessor: jest.fn(),
   };
 });
-
 jest.mock('react-native-toast-message', () => ({
   __esModule: true,
-  default: {
-    show: jest.fn(),
-    hide: jest.fn(),
-  },
+  default: { show: jest.fn(), hide: jest.fn() },
 }));
-
 jest.mock('react-native-vector-icons/FontAwesome5', () => ({
   __esModule: true,
   default: 'FAIcon',
 }));
-
-// ----------------- HOOKS CUSTOM -----------------
-// Ajusta la ruta según tu estructura real en src/hooks/...
-jest.mock('../src/hooks/useEnsureCameraPermission', () => ({
-  __esModule: true,
-  default: jest.fn(() => ({
-    hasPermission: true,
-    requestPermission: jest.fn(),
-  })),
+jest.mock('@fortawesome/react-native-fontawesome', () => ({
+  FontAwesomeIcon: 'FontAwesomeIcon',
 }));
-
-jest.mock('../src/hooks/useCapturePhoto', () => ({
-  __esModule: true,
-  default: jest.fn(() => ({
-    capture: jest.fn(),
-    loading: false,
-  })),
+jest.mock('@fortawesome/free-solid-svg-icons', () => ({
+  faEye: {},
+  faEyeSlash: {},
 }));
-
 // ----------------- UTILS -----------------
-// Si tu archivo se llama detectSimulator.ts en utils:
-jest.mock('../src/utils/detectSimulator', () => ({
+jest.mock('./utils/detectSimulator', () => ({
   __esModule: true,
   isSimulator: jest.fn(() => false),
 }));

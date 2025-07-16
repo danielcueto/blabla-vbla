@@ -11,6 +11,7 @@ import { Camera, useCameraDevices } from 'react-native-vision-camera';
 import FAIcon from 'react-native-vector-icons/FontAwesome5';
 import DeviceInfo from 'react-native-device-info';
 import Toast from 'react-native-toast-message';
+import { useNavigation } from '@react-navigation/native';
 
 import useEnsureCameraPermission from '../../hooks/useEnsureCameraPermission/ensureCameraPermission.hook';
 import { useCapturePhoto } from '../../hooks/useCapturePhoto/useCapturePhoto.hook';
@@ -21,6 +22,9 @@ import {
 } from '../../config/config';
 import { spacing } from '../../config/theme';
 import { styles } from './CameraView.styles';
+import { Button } from '../common/Button';
+
+import { useAuth } from '../../hooks/useAuth';
 
 /**
  * CameraView allows capturing a new photo or picking one from the device gallery.
@@ -42,7 +46,8 @@ export default function CameraView(): JSX.Element {
     : undefined;
 
   const [previewUri, setPreviewUri] = useState<string | null>(null);
-
+  const { logout } = useAuth();
+  const navigation = useNavigation();
   // Responsive vertical offset for bottom controls
   const controlsOffsetY = height * CONTROLS_VERTICAL_OFFSET_RATIO;
 
@@ -93,6 +98,31 @@ export default function CameraView(): JSX.Element {
    * Resets the preview to return to live camera mode.
    */
   const retakeHandler = (): void => setPreviewUri(null);
+
+  /**
+   * Handles user logout and navigation to login screen.
+   */
+  const handleLogout = async (): Promise<void> => {
+    try {
+      await logout();
+      (navigation as any).reset({
+        index: 0,
+        routes: [{ name: 'LoginScreen' }],
+      });
+      Toast.show({ 
+        type: 'success', 
+        text1: 'Logged out successfully', 
+        position: 'bottom' 
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+      Toast.show({ 
+        type: 'error', 
+        text1: 'Error logging out', 
+        position: 'bottom' 
+      });
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -149,6 +179,11 @@ export default function CameraView(): JSX.Element {
           </View>
         </>
       )}
+      <Button 
+        text='Logout' 
+        style={{ position: 'absolute', top: 20, right: 20, width: 100 }}
+        onPress={handleLogout} 
+      />
     </View>
   );
 }

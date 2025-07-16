@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from '../screens/LoginScreen';
 import { TabNavigation } from './TabNavigation';
+import StoryScreen from '../screens/StoryScreen/StoryScreen';
 const Stack = createNativeStackNavigator();
 export function StackNavigation() {
   return (
@@ -19,6 +20,13 @@ export function StackNavigation() {
           }}
           name="Home"
           component={TabNavigation}
+        />
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="StoryNavigation"
+          component={StoryScreen}
         />
       </Stack.Navigator>
     </>

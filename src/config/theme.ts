@@ -12,6 +12,7 @@ export const colors = {
   pureWhite: '#FFFFFF',
   errorRed: '#FF0000',
   successGreen: '#00FF00',
+  dullGray: '#7D7D7D',
 }
 
 /**

@@ -1,5 +1,5 @@
-import React, { JSX } from 'react'
-import { useState, useEffect } from 'react'
+import React, { JSX } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View,
   Image,
@@ -8,38 +8,38 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-} from 'react-native'
+} from 'react-native';
 
-import { showCustomToast } from '../toast/CustomToast'
-import { Label } from '../common/Label'
-import { Input } from '../common/Input'
-import { Button } from '../common/Button'
-import { ErrorMessage } from '../common/ErrorMessage'
-import { useAuth } from '../../hooks/useAuth/useAuth'
-import { styles } from './LoginView.styles'
-import { useNavigation } from '@react-navigation/native'
-import HeadLoginSvg from '../../../assets/svg/head_login.svg'
-import OrnamentLoginSvg from '../../../assets/svg/ornament_login.svg'
+import { showCustomToast } from '../toast/CustomToast';
+import { Label } from '../common/Label';
+import { Input } from '../common/Input';
+import { Button } from '../common/Button';
+import { ErrorMessage } from '../common/ErrorMessage';
+import { useAuth } from '../../hooks/useAuth/useAuth';
+import { styles } from './LoginView.styles';
+import { useNavigation } from '@react-navigation/native';
+import HeadLoginSvg from '../../../assets/svg/head_login.svg';
+import OrnamentLoginSvg from '../../../assets/svg/ornament_login.svg';
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window')
-const isSmallScreen = screenWidth < 380
-const isTablet = screenWidth > 768
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const isSmallScreen = screenWidth < 380;
+const isTablet = screenWidth > 768;
 
 const getKeyboardOffset = () => {
-  if (Platform.OS === 'ios') return 0
+  if (Platform.OS === 'ios') return 0;
 
-  if (isTablet) return -60
-  if (isSmallScreen) return -40
-  return -40
-}
+  if (isTablet) return -60;
+  if (isSmallScreen) return -40;
+  return -40;
+};
 
 export default function LoginView(): JSX.Element {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [showErrorMessage, setShowErrorMessage] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
-  const navigation = useNavigation()
-  const { isAuthenticated, isLoading, login } = useAuth()
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigation = useNavigation();
+  const { isAuthenticated, isLoading, login } = useAuth();
 
   /**
    * Effect that checks if user is already authenticated
@@ -48,33 +48,33 @@ export default function LoginView(): JSX.Element {
    */
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
-      (navigation as any).navigate('Home')
+      (navigation as any).navigate('Home');
     }
-  }, [isAuthenticated, isLoading, navigation])
+  }, [isAuthenticated, isLoading, navigation]);
 
   const handleSubmit = async () => {
     if (!email || !password) {
       showCustomToast({
         type: 'error',
         message: 'Please, complete all fields',
-      })
-      return
+      });
+      return;
     }
 
     try {
-      await login(email, password)
+      await login(email, password);
       showCustomToast({
         type: 'success',
         message: 'Login Successful',
-      })
+      });
     } catch (error: any) {
-      console.log(error)
+      console.log(error);
       setErrorMessage(
         'We found some errors. Please review the fields and make corrections',
-      )
-      setShowErrorMessage(true)
+      );
+      setShowErrorMessage(true);
     }
-  }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -142,6 +142,12 @@ export default function LoginView(): JSX.Element {
                 onPress={handleSubmit}
                 style={styles.submitButton}
               />
+              <Button
+                text="loginBypass"
+                onPress={() => {
+                  (navigation as any).navigate('StoryNavigation');
+                }}
+              />
             </View>
           </View>
 
@@ -154,5 +160,5 @@ export default function LoginView(): JSX.Element {
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
-  )
+  );
 }

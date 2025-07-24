@@ -4,6 +4,7 @@ import { colors } from "../../config/theme";
 const styles = StyleSheet.create({
   container: {
     padding: 28,
+    paddingTop: 0,
   },
   headContainer: {
     marginBottom: 18,
@@ -22,7 +23,7 @@ const styles = StyleSheet.create({
   },
   catImage: {
     width: '100%',
-    aspectRatio: 1, // Mantendrá la proporción 1:1, se ajustará automáticamente
+    aspectRatio: 9/16,
     borderRadius: 20,
     marginTop: 15,
     marginBottom: 15,
